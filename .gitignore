@@ -1,0 +1,72 @@
+# Next.js
+.next/
+out/
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# IDEs and Editors
+.DS_Store
+.idea/
+*.suo
+*.VC.db
+*.log
+*.pid
+*.tmp
+Thumbs.db
+
+# System Files
+.env
+.env.local
+.env.development
+.env.production
+.env.test
+
+
+# Logs
+logs/
+
+# Build artifacts
+dist/
+build/
+coverage/
+
+# Packages
+package-lock.json
+yarn.lock
+
+# Database files (if applicable)
+db.sqlite
+*.db
+
+# Temporary files
+tmp/
+*.tmp
+
+# IDE specific files
+*.csproj
+*.sln
+*.suo
+*.user
+*.userprefs
+
+# Other common files
+*.log
+*.bak
+*.swp
+*.tmp
+
+# Secrets (add any other secrets here)
+secrets.json
+api_keys.json
+private_key.pem
+
+# Docker files (if applicable)
+Dockerfile
+docker-compose.yml
+*.dockerignore
+
+
+# prisma
+prisma/migrations/*.lock
