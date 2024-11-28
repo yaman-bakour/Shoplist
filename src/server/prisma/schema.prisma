@@ -14,18 +14,6 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model Post {
-    id        Int      @id @default(autoincrement())
-    name      String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-
-    createdBy   User   @relation(fields: [createdById], references: [id])
-    createdById String
-
-    @@index([name])
-}
-
 // Necessary for Next auth
 model Account {
     id                String  @id @default(cuid())
@@ -61,7 +49,7 @@ model User {
     image         String?
     accounts      Account[]
     sessions      Session[]
-    posts         Post[]
+    Orders        Order[]
 }
 
 model VerificationToken {
@@ -70,4 +58,38 @@ model VerificationToken {
     expires    DateTime
 
     @@unique([identifier, token])
+}
+
+model Product {
+    id                     String                 @id @default(uuid())
+    name                   String
+    priceInCents           Int
+    filePath               String
+    imagePath              String
+    description            String
+    isAvailableForPurchase Boolean                @default(true)
+    createdAt              DateTime               @default(now())
+    updatedAt              DateTime               @updatedAt
+    Orders                 Order[]
+    DownloadVerification   DownloadVerification[]
+}
+
+model Order {
+    id               String   @id @default(uuid())
+    pricePaidInCents Int
+    createdAt        DateTime @default(now())
+    updatedAt        DateTime @updatedAt
+
+    userId    String
+    productId String
+    User      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+    Product   Product @relation(fields: [productId], references: [id], onDelete: Restrict)
+}
+
+model DownloadVerification {
+    id        String   @id @default(uuid())
+    expiresAt DateTime
+    createdAt DateTime @default(now())
+    productId String
+    Product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
 }

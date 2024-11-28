@@ -6,12 +6,6 @@ async function main() {
   const user = await prisma.user.create({
     data: {},
   });
-  await prisma.post.create({
-    data: {
-      name: "new post",
-      createdById: user.id,
-    },
-  });
 }
 
 main()
