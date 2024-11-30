@@ -8,11 +8,17 @@
  */
 
 import { initTRPC, TRPCError } from "@trpc/server";
+import { Session } from "next-auth";
 import superjson from "superjson";
 import { ZodError } from "zod";
 
-import { getServerAuthSession } from "~/server/auth";
+import { auth } from "~/server/auth";
 import { db } from "~/server/db";
+
+interface CreateContextOptions {
+  session: Session | null;
+  token: string | null;
+}
 
 /**
  * 1. CONTEXT
@@ -27,12 +33,20 @@ import { db } from "~/server/db";
  * @see https://trpc.io/docs/server/context
  */
 export const createTRPCContext = async (opts: { headers: Headers }) => {
-  const session = await getServerAuthSession();
+  const session = await auth();
 
   return {
     db,
     session,
     ...opts,
+  };
+};
+
+export const createInnerTRPCContext = (opts: CreateContextOptions) => {
+  return {
+    session: opts.session ?? null,
+    token: opts.token ?? null,
+    db,
   };
 };
 

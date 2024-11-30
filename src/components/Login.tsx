@@ -1,52 +1,105 @@
+"use client";
 import React from "react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
+import { useForm } from "react-hook-form";
+import { Button } from "./ui/Button";
+import {
+  Form,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormMessage,
+} from "./ui/Form";
+import { Input } from "./ui/Input";
+import { LoginAuth } from "~/validations/auth";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { Session } from "next-auth";
+import { signIn, signOut } from "next-auth/react";
 
-const Login = () => {
+interface Props {
+  session: Session | null;
+}
+
+const Login = ({ session }: Props) => {
+  const form = useForm<z.infer<typeof LoginAuth>>({
+    resolver: zodResolver(LoginAuth),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+
+  const onSubmit = (data: z.infer<typeof LoginAuth>) => {
+    signIn("credentials", {
+      email: data.email,
+      password: data.password,
+    });
+  };
+
   return (
     <div
       style={{ maxWidth: "480px" }}
-      className="mt-10 mb-20 p-4 md:p-7 mx-auto rounded bg-white shadow-lg"
+      className="mx-auto mb-20 mt-10 rounded bg-white p-4 shadow-lg md:p-7"
     >
-      <form>
-        <h2 className="mb-5 text-2xl font-semibold">Login</h2>
-
-        <div className="mb-4">
-          <label className="block mb-1"> Email </label>
-          <input
-            className="appearance-none border border-gray-200 bg-gray-100 rounded-md py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400 w-full"
-            type="text"
-            placeholder="Type your email"
-            required
+      <Form {...form}>
+        <form className="space-y-8">
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input placeholder="example@email.com" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-        </div>
 
-        <div className="mb-4">
-          <label className="block mb-1"> Password </label>
-          <input
-            className="appearance-none border border-gray-200 bg-gray-100 rounded-md py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400 w-full"
-            type="password"
-            placeholder="Type your password"
-            minLength={6}
-            required
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Password</FormLabel>
+                <FormControl>
+                  <Input {...field} type="password" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
           />
-        </div>
+          <Button
+            type="button"
+            className="bg-blue-500 hover:bg-blue-600"
+            onClick={form.handleSubmit(onSubmit)}
+          >
+            Log in
+          </Button>
 
-        <button
-          type="submit"
-          className="my-2 px-4 py-2 text-center w-full inline-block text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700"
-        >
-          Login
-        </button>
+          <Button
+            type="button"
+            className="bg-blue-500 hover:bg-blue-600"
+            onClick={() => signOut()}
+          >
+            Log out
+          </Button>
 
-        <hr className="mt-4" />
-
-        <p className="text-center mt-5">
-          Don't have an account?{" "}
-          <Link to="/register" className="text-blue-500">
-            Register
-          </Link>
-        </p>
-      </form>
+          <p>
+            already have an account?{" "}
+            <Link
+              href={"/signup"}
+              className="text-blue-500 hover:text-blue-600"
+            >
+              Sign up
+            </Link>
+          </p>
+          <>signed in as {session?.user.name}</>
+        </form>
+      </Form>
     </div>
   );
 };

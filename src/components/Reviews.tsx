@@ -3,11 +3,11 @@ import StarRatings from "react-star-ratings";
 
 const Reviews = () => {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      <article className="block p-6 bg-white max-w-sm rounded-lg border border-gray-200 shadow-md mb-5">
-        <div className="flex items-center mb-4 space-x-4">
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3">
+      <article className="mb-5 block max-w-sm rounded-lg border border-gray-200 bg-white p-6 shadow-md">
+        <div className="mb-4 flex items-center space-x-4">
           <img
-            className="w-10 h-10 rounded-full"
+            className="h-10 w-10 rounded-full"
             src={"/logo192.png"}
             alt="user"
           />
@@ -21,7 +21,7 @@ const Reviews = () => {
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center space-x-2 mb-2">
+        <div className="mb-2 flex flex-wrap items-center space-x-2">
           <div className="ratings">
             <StarRatings
               rating={5}
@@ -35,7 +35,7 @@ const Reviews = () => {
           <span className="text-yellow-500">{5}</span>
         </div>
 
-        <p className="mb-2 font-light text-gray-500 dark:text-gray-400 text-xl">
+        <p className="mb-2 text-xl font-light text-gray-500 dark:text-gray-400">
           This is user review
         </p>
       </article>

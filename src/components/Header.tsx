@@ -1,13 +1,13 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import Link from "next/link";
 import Search from "./Search";
 
 const Header = () => {
   return (
-    <header className="bg-white py-2 border-b">
-      <div className="container max-w-screen-xl mx-auto px-4">
+    <header className="border-b bg-white py-2">
+      <div className="container mx-auto max-w-screen-xl px-4">
         <div className="flex flex-wrap items-center">
-          <div className="flex-shrink-0 mr-5">
+          <div className="mr-5 flex-shrink-0">
             <a href="/">
               <img
                 src="logo192.png"
@@ -20,26 +20,26 @@ const Header = () => {
           </div>
           <Search />
 
-          <div className="flex items-center space-x-2 ml-auto">
+          <div className="ml-auto flex items-center space-x-2">
             <Link
-              to="/cart"
-              className="px-3 py-2 inline-block text-center text-gray-700 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-gray-100 hover:border-gray-300"
+              href="/cart"
+              className="inline-block rounded-md border border-gray-200 bg-white px-3 py-2 text-center text-gray-700 shadow-sm hover:border-gray-300 hover:bg-gray-100"
             >
-              <i className="text-gray-400 w-5 fa fa-shopping-cart"></i>
-              <span className="hidden lg:inline ml-1">
+              <i className="fa fa-shopping-cart w-5 text-gray-400"></i>
+              <span className="ml-1 hidden lg:inline">
                 Cart (<b>0</b>)
               </span>
             </Link>
             <Link
-              to="/login"
-              className="px-3 py-2 inline-block text-center text-gray-700 bg-white shadow-sm border border-gray-200 rounded-md hover:bg-gray-100 hover:border-gray-300"
+              href="/signin"
+              className="inline-block rounded-md border border-gray-200 bg-white px-3 py-2 text-center text-gray-700 shadow-sm hover:border-gray-300 hover:bg-gray-100"
             >
-              <i className="text-gray-400 w-5 fa fa-user"></i>
-              <span className="hidden lg:inline ml-1">Sign in</span>
+              <i className="fa fa-user w-5 text-gray-400"></i>
+              <span className="ml-1 hidden lg:inline">Sign in</span>
             </Link>
-            <Link to="/me">
-              <div className="flex items-center mb-4 space-x-3 mt-4 cursor-pointer">
-                <img className="w-10 h-10 rounded-full" src={"logo192.png"} />
+            <Link href="/profile">
+              <div className="mb-4 mt-4 flex cursor-pointer items-center space-x-3">
+                <img className="h-10 w-10 rounded-full" src={"logo192.png"} />
                 <div className="space-y-1 font-medium">
                   <p>
                     Ghulam
@@ -52,10 +52,10 @@ const Header = () => {
             </Link>
           </div>
 
-          <div className="lg:hidden ml-2">
+          <div className="ml-2 lg:hidden">
             <button
               type="button"
-              className="bg-white p-3 inline-flex items-center rounded-md text-black hover:bg-gray-200 hover:text-gray-800 border border-transparent"
+              className="inline-flex items-center rounded-md border border-transparent bg-white p-3 text-black hover:bg-gray-200 hover:text-gray-800"
             >
               <span className="sr-only">Open menu</span>
               <i className="fa fa-bars fa-lg"></i>

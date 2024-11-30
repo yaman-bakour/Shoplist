@@ -1,30 +1,30 @@
 import React from "react";
 import StarRatings from "react-star-ratings";
-import BreadCrumbs from "../layout/BreadCrumbs";
-import NewReview from "../reviews/NewReview";
-import Reviews from "../reviews/Reviews";
+import BreadCrumbs from "./BreadCrumbs";
+import NewReview from "./NewReview";
+import Reviews from "./Reviews";
 
 const ProductDetails = () => {
   return (
     <>
       <BreadCrumbs />
       <section className="bg-white py-10">
-        <div className="container max-w-screen-xl mx-auto px-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 mb-5">
+        <div className="container mx-auto max-w-screen-xl px-4">
+          <div className="mb-5 grid grid-cols-1 gap-8 sm:grid-cols-2">
             <aside>
-              <div className="border border-gray-200 shadow-sm p-3 text-center rounded mb-5">
+              <div className="mb-5 rounded border border-gray-200 p-3 text-center shadow-sm">
                 <img
-                  className="object-cover inline-block"
+                  className="inline-block object-cover"
                   src="/logo192.png"
                   alt="Product title"
                   width="340"
                   height="340"
                 />
               </div>
-              <div className="space-x-2 overflow-auto text-center whitespace-nowrap">
-                <a className="inline-block border border-gray-200 p-1 rounded-md hover:border-blue-500 cursor-pointer">
+              <div className="space-x-2 overflow-auto whitespace-nowrap text-center">
+                <a className="inline-block cursor-pointer rounded-md border border-gray-200 p-1 hover:border-blue-500">
                   <img
-                    className="w-14 h-14"
+                    className="h-14 w-14"
                     src={"/logo192.png"}
                     alt="Product title"
                     width="500"
@@ -34,9 +34,9 @@ const ProductDetails = () => {
               </div>
             </aside>
             <main>
-              <h2 className="font-semibold text-2xl mb-4">Product title</h2>
+              <h2 className="mb-4 text-2xl font-semibold">Product title</h2>
 
-              <div className="flex flex-wrap items-center space-x-2 mb-2">
+              <div className="mb-2 flex flex-wrap items-center space-x-2">
                 <div className="ratings">
                   <StarRatings
                     rating={5}
@@ -61,7 +61,7 @@ const ProductDetails = () => {
                 <span className="text-green-500">Verified</span>
               </div>
 
-              <p className="mb-4 font-semibold text-xl">$234</p>
+              <p className="mb-4 text-xl font-semibold">$234</p>
 
               <p className="mb-4 text-gray-500">
                 Lorem Ipsum is simply dummy text of the printing and typesetting
@@ -69,8 +69,8 @@ const ProductDetails = () => {
                 text ever since the 1500s.
               </p>
 
-              <div className="flex flex-wrap gap-2 mb-5">
-                <button className="px-4 py-2 inline-block text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700">
+              <div className="mb-5 flex flex-wrap gap-2">
+                <button className="inline-block rounded-md border border-transparent bg-blue-600 px-4 py-2 text-white hover:bg-blue-700">
                   <i className="fa fa-shopping-cart mr-2"></i>
                   Add to cart
                 </button>
@@ -79,16 +79,16 @@ const ProductDetails = () => {
               <ul className="mb-5">
                 <li className="mb-1">
                   {" "}
-                  <b className="font-medium w-36 inline-block">Stock</b>
+                  <b className="inline-block w-36 font-medium">Stock</b>
                 </li>
                 <li className="mb-1">
                   {" "}
-                  <b className="font-medium w-36 inline-block">Category:</b>
+                  <b className="inline-block w-36 font-medium">Category:</b>
                   <span className="text-gray-500">Electonics</span>
                 </li>
                 <li className="mb-1">
                   {" "}
-                  <b className="font-medium w-36 inline-block">
+                  <b className="inline-block w-36 font-medium">
                     Seller / Brand:
                   </b>
                   <span className="text-gray-500">Apple</span>
@@ -101,7 +101,7 @@ const ProductDetails = () => {
           <hr />
 
           <div className="font-semibold">
-            <h1 className="text-gray-500 review-title mb-6 mt-10 text-2xl">
+            <h1 className="review-title mb-6 mt-10 text-2xl text-gray-500">
               Other Customers Reviews
             </h1>
             <Reviews />

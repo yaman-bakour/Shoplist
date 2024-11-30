@@ -1,5 +1,5 @@
 import React from "react";
-import Sidebar from "../layout/Sidebar";
+import Sidebar from "./Sidebar";
 
 const NewProduct = () => {
   const categories = [
@@ -13,46 +13,46 @@ const NewProduct = () => {
 
   return (
     <section className="py-10">
-      <div className="container max-w-screen-xl mx-auto px-4">
-        <div className="flex flex-col md:flex-row -mx-4">
+      <div className="container mx-auto max-w-screen-xl px-4">
+        <div className="-mx-4 flex flex-col md:flex-row">
           <Sidebar />
-          <main className="md:w-2/3 lg:w-3/4 px-4">
-            <section class="container max-w-3xl p-6 mx-auto">
-              <h1 class="mb-3 text-xl md:text-3xl font-semibold text-black mb-8">
+          <main className="px-4 md:w-2/3 lg:w-3/4">
+            <section className="container mx-auto max-w-3xl p-6">
+              <h1 className="mb-8 text-xl font-semibold text-black md:text-3xl">
                 Create New Product
               </h1>
 
               <form>
-                <div class="mb-4">
-                  <label class="block mb-1"> Name </label>
+                <div className="mb-4">
+                  <label className="mb-1 block"> Name </label>
                   <input
                     type="text"
-                    class="appearance-none border border-gray-200 bg-gray-100 rounded-md py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400 w-full"
+                    className="w-full appearance-none rounded-md border border-gray-200 bg-gray-100 px-3 py-2 hover:border-gray-400 focus:border-gray-400 focus:outline-none"
                     placeholder="Product name"
                     name="name"
                     required
                   />
                 </div>
 
-                <div class="mb-4 mt-5">
-                  <label class="block mb-1"> Description </label>
+                <div className="mb-4 mt-5">
+                  <label className="mb-1 block"> Description </label>
                   <textarea
-                    rows="4"
-                    class="appearance-none border border-gray-200 bg-gray-100 rounded-md py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400 w-full"
+                    rows={4}
+                    className="w-full appearance-none rounded-md border border-gray-200 bg-gray-100 px-3 py-2 hover:border-gray-400 focus:border-gray-400 focus:outline-none"
                     placeholder="Product description"
                     name="description"
                     required
                   ></textarea>
                 </div>
 
-                <div class="grid md:grid-cols-2 gap-x-2 mt-5">
-                  <div class="mb-4">
-                    <label class="block mb-1"> Price </label>
-                    <div class="relative">
-                      <div class="col-span-2">
+                <div className="mt-5 grid gap-x-2 md:grid-cols-2">
+                  <div className="mb-4">
+                    <label className="mb-1 block"> Price </label>
+                    <div className="relative">
+                      <div className="col-span-2">
                         <input
                           type="text"
-                          class="appearance-none border border-gray-200 bg-gray-100 rounded-md py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400 w-full"
+                          className="w-full appearance-none rounded-md border border-gray-200 bg-gray-100 px-3 py-2 hover:border-gray-400 focus:border-gray-400 focus:outline-none"
                           placeholder="0.00"
                           name="price"
                           required
@@ -60,11 +60,11 @@ const NewProduct = () => {
                       </div>
                     </div>
                   </div>
-                  <div class="mb-4">
-                    <label class="block mb-1"> Category </label>
-                    <div class="relative">
+                  <div className="mb-4">
+                    <label className="mb-1 block"> Category </label>
+                    <div className="relative">
                       <select
-                        class="block appearance-none border border-gray-200 bg-gray-100 rounded-md py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400 w-full"
+                        className="block w-full appearance-none rounded-md border border-gray-200 bg-gray-100 px-3 py-2 hover:border-gray-400 focus:border-gray-400 focus:outline-none"
                         name="category"
                         required
                       >
@@ -74,11 +74,11 @@ const NewProduct = () => {
                           </option>
                         ))}
                       </select>
-                      <i class="absolute inset-y-0 right-0 p-2 text-gray-400">
+                      <i className="absolute inset-y-0 right-0 p-2 text-gray-400">
                         <svg
                           width="22"
                           height="22"
-                          class="fill-current"
+                          className="fill-current"
                           viewBox="0 0 20 20"
                         >
                           <path d="M7 10l5 5 5-5H7z"></path>
@@ -88,25 +88,25 @@ const NewProduct = () => {
                   </div>
                 </div>
 
-                <div class="grid md:grid-cols-2 gap-x-2 mt-5">
-                  <div class="mb-4">
-                    <label class="block mb-1"> Seller / Brand </label>
+                <div className="mt-5 grid gap-x-2 md:grid-cols-2">
+                  <div className="mb-4">
+                    <label className="mb-1 block"> Seller / Brand </label>
                     <input
                       type="text"
-                      class="appearance-none border border-gray-200 bg-gray-100 rounded-md py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400 w-full"
+                      className="w-full appearance-none rounded-md border border-gray-200 bg-gray-100 px-3 py-2 hover:border-gray-400 focus:border-gray-400 focus:outline-none"
                       placeholder="Seller or brand"
                       name="seller"
                       required
                     />
                   </div>
 
-                  <div class="mb-4">
-                    <label class="block mb-1"> Stock </label>
-                    <div class="relative">
-                      <div class="col-span-2">
+                  <div className="mb-4">
+                    <label className="mb-1 block"> Stock </label>
+                    <div className="relative">
+                      <div className="col-span-2">
                         <input
                           type="text"
-                          class="appearance-none border border-gray-200 bg-gray-100 rounded-md py-2 px-3 hover:border-gray-400 focus:outline-none focus:border-gray-400 w-full"
+                          className="w-full appearance-none rounded-md border border-gray-200 bg-gray-100 px-3 py-2 hover:border-gray-400 focus:border-gray-400 focus:outline-none"
                           placeholder="0"
                           name="stock"
                           required
@@ -118,7 +118,7 @@ const NewProduct = () => {
 
                 <button
                   type="submit"
-                  class="my-2 px-4 py-2 text-center inline-block text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 w-full"
+                  className="my-2 inline-block w-full rounded-md border border-transparent bg-blue-600 px-4 py-2 text-center text-white hover:bg-blue-700"
                 >
                   Create Product
                 </button>

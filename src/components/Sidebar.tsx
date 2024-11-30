@@ -1,16 +1,16 @@
+import Link from "next/link";
 import React from "react";
-import { Link } from "react-router-dom";
 
 const Sidebar = () => {
   return (
-    <aside className="md:w-1/3 lg:w-1/4 px-4">
+    <aside className="px-4 md:w-1/3 lg:w-1/4">
       <ul className="sidebar">
         <>
           <li>
             {" "}
             <Link
-              to="/admin/products/new"
-              className="block px-3 py-2 text-gray-800 hover:bg-blue-100 hover:text-blue-500 rounded-md"
+              href="/admin/products/new"
+              className="block rounded-md px-3 py-2 text-gray-800 hover:bg-blue-100 hover:text-blue-500"
             >
               New Product <span className="text-red-500">(Admin)</span>
             </Link>
@@ -19,8 +19,8 @@ const Sidebar = () => {
           <li>
             {" "}
             <Link
-              to="/admin/products"
-              className="block px-3 py-2 text-gray-800 hover:bg-blue-100 hover:text-blue-500 rounded-md"
+              href="/admin/products"
+              className="block rounded-md px-3 py-2 text-gray-800 hover:bg-blue-100 hover:text-blue-500"
             >
               All Products <span className="text-red-500">(Admin)</span>
             </Link>
@@ -29,8 +29,8 @@ const Sidebar = () => {
           <li>
             {" "}
             <Link
-              to="/admin/orders"
-              className="block px-3 py-2 text-gray-800 hover:bg-blue-100 hover:text-blue-500 rounded-md"
+              href="/admin/orders"
+              className="block rounded-md px-3 py-2 text-gray-800 hover:bg-blue-100 hover:text-blue-500"
             >
               All Orders <span className="text-red-500">(Admin)</span>
             </Link>
@@ -39,8 +39,8 @@ const Sidebar = () => {
           <li>
             {" "}
             <Link
-              to="/admin/users"
-              className="block px-3 py-2 text-gray-800 hover:bg-blue-100 hover:text-blue-500 rounded-md"
+              href="/admin/users"
+              className="block rounded-md px-3 py-2 text-gray-800 hover:bg-blue-100 hover:text-blue-500"
             >
               All Users <span className="text-red-500">(Admin)</span>
             </Link>
@@ -52,8 +52,8 @@ const Sidebar = () => {
         <li>
           {" "}
           <Link
-            to="/me"
-            className="block px-3 py-2 text-gray-800 hover:bg-blue-100 hover:text-blue-500 rounded-md"
+            href="/profile"
+            className="block rounded-md px-3 py-2 text-gray-800 hover:bg-blue-100 hover:text-blue-500"
           >
             Your Profile
           </Link>
@@ -61,8 +61,8 @@ const Sidebar = () => {
         <li>
           {" "}
           <Link
-            to="/me/orders"
-            className="block px-3 py-2 text-gray-800 hover:bg-blue-100 hover:text-blue-500 rounded-md"
+            href="/orders"
+            className="block rounded-md px-3 py-2 text-gray-800 hover:bg-blue-100 hover:text-blue-500"
           >
             Orders
           </Link>
@@ -70,25 +70,17 @@ const Sidebar = () => {
         <li>
           {" "}
           <Link
-            to="/me/update"
-            className="block px-3 py-2 text-gray-800 hover:bg-blue-100 hover:text-blue-500 rounded-md"
+            // TODO : fix href
+            href="/profile/"
+            className="block rounded-md px-3 py-2 text-gray-800 hover:bg-blue-100 hover:text-blue-500"
           >
             Update Profile
-          </Link>
-        </li>
-        <li>
-          {" "}
-          <Link
-            to="/me/update_password"
-            className="block px-3 py-2 text-gray-800 hover:bg-blue-100 hover:text-blue-500 rounded-md"
-          >
-            Update Password
           </Link>
         </li>
 
         <li>
           {" "}
-          <a className="block px-3 py-2 text-red-800 hover:bg-red-100 hover:text-white-500 rounded-md cursor-pointer">
+          <a className="hover:text-white-500 block cursor-pointer rounded-md px-3 py-2 text-red-800 hover:bg-red-100">
             Logout
           </a>
         </li>
