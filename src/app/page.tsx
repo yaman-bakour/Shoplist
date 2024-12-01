@@ -1,5 +1,8 @@
-import Home from "~/components/Home";
+import { redirect } from "next/navigation";
+import { auth } from "~/server/auth";
 
 export default async function Page() {
-  return <Home />;
+  const session = await auth();
+  if (!session) redirect("/signin");
+  if (session) redirect("/products");
 }

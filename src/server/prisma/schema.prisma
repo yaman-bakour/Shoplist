@@ -48,6 +48,7 @@ model User {
     email         String?   @unique
     emailVerified DateTime?
     image         String?
+    UserRole      UserRole  @default(User)
     Accounts      Account[]
     Sessions      Session[]
     Orders        Order[]
@@ -93,4 +94,9 @@ model DownloadVerification {
     createdAt DateTime @default(now())
     productId String
     Product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+enum UserRole {
+    Admin
+    User
 }

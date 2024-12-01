@@ -1,16 +1,12 @@
 import { PrismaAdapter } from "@auth/prisma-adapter";
-import NextAuth, {
-  DefaultSession,
-  NextAuthConfig,
-  Session,
-  User,
-} from "next-auth";
+import NextAuth, { DefaultSession, NextAuthConfig, User } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { nanoid } from "nanoid";
 import { db } from "~/server/db";
 import { LoginAuth } from "~/validations/auth";
 import { serverSideCallerPublic } from "./api/root";
-import { skipCSRFCheck } from "@auth/core";
+import { UserRole } from "@prisma/client";
+import { Adapter } from "@auth/core/adapters";
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
  * object and keep type safety.
@@ -21,15 +17,14 @@ declare module "next-auth" {
   interface Session extends DefaultSession {
     user: {
       id: string;
-      // ...other properties
-      // role: UserRole;
+      role: UserRole;
     } & DefaultSession["user"];
   }
 
-  // interface User {
-  //   // ...other properties
-  //   // role: UserRole;
-  // }
+  interface User {
+    role: UserRole;
+    sessionToken: string;
+  }
 }
 
 /**
@@ -42,7 +37,7 @@ const adapter = PrismaAdapter(db);
 export const sessionTokenMaxAge = 60 * 60 * 24 * 30; // 30 days
 const oauthToken = nanoid(256);
 export const authOptions = {
-  adapter: adapter,
+  adapter: adapter as Adapter,
   providers: [
     /**
      * ...add more providers here.
@@ -67,28 +62,36 @@ export const authOptions = {
       // },
       async authorize(credentials) {
         try {
-          // console.log({ credentials });
           const { email, password } = LoginAuth.parse(credentials);
 
           // Add logic here to look up the user from the credentials supplied
           const caller = await serverSideCallerPublic();
           const user = await caller.user.loginUser({ email, password });
-          const token = nanoid(256);
-          await adapter.createSession?.({
-            userId: user.id,
-            expires: new Date(Date.now() + sessionTokenMaxAge * 1000),
-            sessionToken: token,
-          });
 
-          // Any object returned will be saved in `user` property of the JWT
-          const userJwt: User = {
-            id: user.id,
-            name: user.name,
-            email: user.email,
-            image: user.image,
-          };
+          if (user) {
+            const token = nanoid(256);
+            await adapter.createSession?.({
+              userId: user.id,
+              expires: new Date(Date.now() + sessionTokenMaxAge * 1000),
+              sessionToken: token,
+            });
 
-          return userJwt;
+            // Any object returned will be saved in `user` property of the JWT
+            const userJwt: User = {
+              id: user.id,
+              name: user.name,
+              email: user.email,
+              image: user.image,
+              role: user.UserRole,
+              sessionToken: token,
+            };
+
+            return userJwt;
+          } else {
+            // If you return null then an error will be displayed advising the user to check their details.
+            // You can also Reject this callback with an Error thus the user will be sent to the error page with the error message as a query parameter
+            return null;
+          }
         } catch (err) {
           console.error(">>>> auth error", err);
           return null;
@@ -115,7 +118,7 @@ export const authOptions = {
         ...session,
         user: {
           ...session.user,
-          // id: user?.id ?? token?.id,
+          role: token.role as UserRole,
         },
       };
     },
@@ -126,6 +129,12 @@ export const authOptions = {
       try {
         delete token.picture;
         const isCredential = account?.provider === "credentials";
+        if (user) {
+          token.id = user.id;
+          token.image = user.image;
+          token.role = user.role;
+          token.sessionToken = user?.sessionToken ?? oauthToken;
+        }
         if (token?.sessionToken) {
           const session = await adapter.getSessionAndUser?.(
             token.sessionToken as string,
@@ -149,6 +158,9 @@ export const authOptions = {
         return token;
       } catch (error) {
         return null;
+        // throw new Error(
+        //   "UNAUTHORIZED >>> deleted user sessionToken from db but the user keeps requesting from the deleted sessionToken",
+        // );
       }
     },
   },
@@ -167,18 +179,18 @@ export const authOptions = {
 
 export const { auth, signIn, signOut, handlers } = NextAuth(authOptions);
 
-export const validateToken = async (token: string): Promise<Session | null> => {
-  const sessionToken = token.slice("Bearer ".length);
-  const session = await adapter.getSessionAndUser?.(sessionToken);
-  return session
-    ? {
-        user: {
-          ...session.user,
-        },
-        expires: session.session.expires.toISOString(),
-      }
-    : null;
-};
+// export const validateToken = async (token: string): Promise<Session | null> => {
+//   const sessionToken = token.slice("Bearer ".length);
+//   const session = await adapter.getSessionAndUser?.(sessionToken);
+//   return session
+//     ? {
+//         user: {
+//           ...session.user,
+//         },
+//         expires: session.session.expires.toISOString(),
+//       }
+//     : null;
+// };
 
 export const invalidateSessionToken = async (token: string) => {
   const sessionToken = token.slice("Bearer ".length);

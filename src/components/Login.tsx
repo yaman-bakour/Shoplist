@@ -16,7 +16,7 @@ import { LoginAuth } from "~/validations/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Session } from "next-auth";
-import { signIn, signOut } from "next-auth/react";
+import { signIn } from "next-auth/react";
 
 interface Props {
   session: Session | null;
@@ -80,14 +80,6 @@ const Login = ({ session }: Props) => {
             Log in
           </Button>
 
-          <Button
-            type="button"
-            className="bg-blue-500 hover:bg-blue-600"
-            onClick={() => signOut()}
-          >
-            Log out
-          </Button>
-
           <p>
             already have an account?{" "}
             <Link
@@ -97,7 +89,6 @@ const Login = ({ session }: Props) => {
               Sign up
             </Link>
           </p>
-          <>signed in as {session?.user.name}</>
         </form>
       </Form>
     </div>
