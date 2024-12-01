@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
-import Sidebar from "~/components/Sidebar";
+import AppSidebar from "~/components/AppSidebar";
+import { SidebarProvider, SidebarTrigger } from "~/components/ui/Sidebar";
 import { auth } from "~/server/auth";
 
 export default async function RootLayout({
@@ -10,9 +11,11 @@ export default async function RootLayout({
   const session = await auth();
   if (!session) redirect("/signin");
   return (
-    <div className="flex">
-      <Sidebar />
-      {children}
-    </div>
+    <SidebarProvider>
+      <main className="flex w-full">
+        <AppSidebar />
+        {children}
+      </main>
+    </SidebarProvider>
   );
 }

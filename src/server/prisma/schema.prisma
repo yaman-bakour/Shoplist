@@ -52,6 +52,7 @@ model User {
     Accounts      Account[]
     Sessions      Session[]
     Orders        Order[]
+    Addresses     Address[]
 }
 
 model VerificationToken {
@@ -94,6 +95,19 @@ model DownloadVerification {
     createdAt DateTime @default(now())
     productId String
     Product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+}
+
+model Address {
+    id          String @id @default(uuid())
+    userId      String
+    address     String
+    country     String
+    phonenumber Int
+    city        String
+    zip         String
+    state       String
+
+    User User @relation(fields: [userId], references: [id])
 }
 
 enum UserRole {

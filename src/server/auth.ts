@@ -113,12 +113,17 @@ export const authOptions = {
     },
   },
   callbacks: {
-    session: ({ session, user, token }) => {
+    session: ({ session, token }) => {
       return {
         ...session,
         user: {
           ...session.user,
+          image: token.image as string,
           role: token.role as UserRole,
+          name: token.name,
+          id: token.id as string,
+          email: token.email,
+          sessionToken: token.sessionToken as string,
         },
       };
     },
@@ -132,6 +137,8 @@ export const authOptions = {
         if (user) {
           token.id = user.id;
           token.image = user.image;
+          token.name = user.name;
+          token.email = user.email;
           token.role = user.role;
           token.sessionToken = user?.sessionToken ?? oauthToken;
         }

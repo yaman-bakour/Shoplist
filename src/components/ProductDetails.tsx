@@ -1,13 +1,11 @@
 import React from "react";
 import StarRatings from "react-star-ratings";
-import BreadCrumbs from "./BreadCrumbs";
 import NewReview from "./NewReview";
 import Reviews from "./Reviews";
 
 const ProductDetails = () => {
   return (
     <>
-      <BreadCrumbs />
       <section className="bg-white py-10">
         <div className="container mx-auto max-w-screen-xl px-4">
           <div className="mb-5 grid grid-cols-1 gap-8 sm:grid-cols-2">

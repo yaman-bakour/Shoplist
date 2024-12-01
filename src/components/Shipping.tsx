@@ -1,11 +1,9 @@
 import React from "react";
-import BreadCrumbs from "./BreadCrumbs";
 import Link from "next/link";
 
 const Shipping = () => {
   return (
     <div>
-      <BreadCrumbs />
       <section className="bg-gray-50 py-10">
         <div className="container mx-auto max-w-screen-xl px-4">
           <div className="flex flex-col gap-4 md:flex-row lg:gap-8">
