@@ -1,17 +1,43 @@
+"use client";
 import React from "react";
-import OrderItem from "./OrderItem";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "./ui/Card";
+import { api } from "~/trpc/react";
+import { useSession } from "next-auth/react";
 const ListOrders = () => {
+  const { data: session } = useSession();
+  const { data: Orders } = api.order.getUserOrders.useQuery({
+    userId: session?.user.id ?? "",
+  });
   return (
-    <>
-      <section className="py-10">
-        <div className="container mx-auto max-w-screen-xl px-4">
-          <main className="px-4 md:w-2/3 lg:w-3/4">
-            <h3 className="mb-5 text-xl font-semibold">Your Orders</h3>
-            <OrderItem />
-          </main>
-        </div>
-      </section>
-    </>
+    <div className="grid w-full grid-cols-3 gap-10 p-10">
+      {Orders?.map((order) => (
+        <Card className="h-fit">
+          <CardContent>
+            <CardHeader>
+              <CardTitle>
+                Order total : {order.pricePaidInCents / 100}
+              </CardTitle>
+              <CardDescription>Order ID : {order.id}</CardDescription>
+            </CardHeader>
+            <CardContent>
+              Ordered At : {order.createdAt.toLocaleString()}
+            </CardContent>
+            <CardFooter>
+              <div
+                className={`${order.completed ? "text-green-500" : "text-red-500"}`}
+              >{`${order.completed ? "Completed" : "Not Completed"}`}</div>
+            </CardFooter>
+          </CardContent>
+        </Card>
+      ))}
+    </div>
   );
 };
 

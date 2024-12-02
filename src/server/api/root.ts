@@ -1,4 +1,4 @@
-import { TRPCError } from "@trpc/server";
+import { TRPCError, inferRouterOutputs } from "@trpc/server";
 import {
   createCallerFactory,
   createInnerTRPCContext,
@@ -57,3 +57,5 @@ export const serverSideCallerProtected = async () => {
   const caller = appRouter.createCaller(ctx);
   return caller;
 };
+
+export type RouterOutputs = inferRouterOutputs<AppRouter>;

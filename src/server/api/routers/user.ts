@@ -2,7 +2,12 @@ import { TRPCError } from "@trpc/server";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
 
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
+import {
+  createTRPCRouter,
+  protectedProcedure,
+  protectedProcedureAdmin,
+  publicProcedure,
+} from "../trpc";
 import { LoginAuth, RegisterAuth } from "~/validations/auth";
 
 export const userRouter = createTRPCRouter({
@@ -114,6 +119,10 @@ export const userRouter = createTRPCRouter({
 
       return foundUser;
     }),
+
+  getAllUsers: protectedProcedureAdmin.query(async ({ ctx }) => {
+    return await ctx.db.user.findMany();
+  }),
 
   // updateUser: protectedProcedure
   //   .input(updateUserValidation)
