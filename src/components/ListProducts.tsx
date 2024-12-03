@@ -1,84 +1,115 @@
 "use client";
-import React from "react";
-import StarRatings from "react-star-ratings";
-import Header from "./Header";
+import React, { useRef, useState } from "react";
 import Filters from "./Filters";
-import Link from "next/link";
+import { api } from "~/trpc/react";
+import { Category } from "@prisma/client";
+import { Card, CardContent, CardDescription, CardHeader } from "./ui/Card";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/Avatar";
+import { Button } from "./ui/Button";
+import { useGlobalContext } from "./AppSidebar";
 
 const ListProducts = () => {
+  const AllCategories = Object.values(Category);
+  const [priceRange, setPriceRange] = useState<{
+    min: number | undefined;
+    max: number | undefined;
+  }>({ min: undefined, max: undefined });
+  const [category, setCategory] = useState<Category | undefined>();
+
+  const min = useRef<HTMLInputElement>(null);
+  let max = useRef<HTMLInputElement>(null);
+  const { data: AllProducts, isLoading } = api.product.getAllProducts.useQuery({
+    Category: category,
+    min: priceRange.min,
+    max: priceRange.max,
+  });
+  const CartContext = useGlobalContext();
+
+  console.log(CartContext?.cart);
   return (
     <>
-      <Header />
       <section className="py-12">
-        <div className="container mx-auto max-w-screen-xl px-4">
-          <div className="-mx-4 flex flex-col md:flex-row">
-            <Filters />
+        <div className="mx-auto h-full max-w-screen-xl px-4">
+          <div className="-mx-4 flex h-full flex-col md:flex-row">
+            <Filters
+              priceRange={priceRange}
+              setPriceRange={setPriceRange}
+              category={category}
+              setCategory={setCategory}
+              allCategories={AllCategories}
+              max={max}
+              min={min}
+            />
+            <div className="grid-cols-2 gap-8 xl:grid">
+              {isLoading ? (
+                <>Loading...</>
+              ) : AllProducts?.length != 0 && AllProducts ? (
+                AllProducts.map((product) => {
+                  return (
+                    <Card className="mb-8 w-full" key={product.id}>
+                      <div className="flex">
+                        <Avatar className="my-auto ml-4 h-40 w-40">
+                          <AvatarImage
+                            src={product.imagePath}
+                            alt={product.name}
+                          />
+                          <AvatarFallback className="text-4xl">
+                            {product.name?.split(" ").map((n) => {
+                              return n.charAt(0).toUpperCase();
+                            })}
+                          </AvatarFallback>
+                        </Avatar>
 
-            <main className="px-3 md:w-2/3 lg:w-3/4">
-              <article className="mb-5 overflow-hidden rounded border border-gray-200 bg-white shadow-sm">
-                <div className="flex flex-col md:flex-row">
-                  <div className="flex p-3 md:w-1/4">
-                    <div
-                      style={{
-                        width: "80%",
-                        height: "70%",
-                        position: "relative",
-                      }}
-                    >
-                      <img
-                        src={"/logo192.png"}
-                        alt="product anme"
-                        height="240"
-                        width="240"
-                      />
-                    </div>
-                  </div>
-                  <div className="md:w-2/4">
-                    <div className="p-4">
-                      <Link href={`/`} className="hover:text-blue-600">
-                        Lorem Ipsum is simply dummy text
-                      </Link>
-                      <div className="mb-2 flex flex-wrap items-center space-x-2">
-                        <div className="ratings">
-                          <div className="my-1">
-                            <StarRatings
-                              rating={5}
-                              starRatedColor="#ffb829"
-                              numberOfStars={5}
-                              starDimension="18px"
-                              starSpacing="1px"
-                              name="rating"
-                            />
-                          </div>
-                        </div>
-                        <b className="text-gray-300">•</b>
-                        <span className="ml-1 text-yellow-500">5</span>
+                        <CardContent>
+                          <CardHeader className="pl-0 text-2xl">
+                            {product.name}
+                            <br />
+                            Category : {product.category}
+                          </CardHeader>
+                          <CardDescription>
+                            Price : {product.priceInCents / 100} $
+                            <br />
+                            {product.description}
+                            <br />
+                            <Button
+                              onClick={() => {
+                                CartContext?.setCart((prev) => {
+                                  const isInCart = prev.filter(
+                                    (item) => item.productId === product.id,
+                                  )[0]
+                                    ? true
+                                    : false;
+                                  if (isInCart) return prev;
+                                  else
+                                    return [
+                                      ...prev,
+                                      {
+                                        productId: product.id,
+                                        quantity: 1,
+                                        name: product.name,
+                                        priceInCents: product.priceInCents,
+                                      },
+                                    ];
+                                });
+                              }}
+                              className={`mt-4 ${CartContext?.cart.filter((item) => item.productId === product.id).length === 0 ? " bg-blue-500 hover:bg-blue-600" : "bg-green-500 hover:bg-green-600"}`}
+                            >
+                              {CartContext?.cart.filter(
+                                (item) => item.productId === product.id,
+                              ).length === 0
+                                ? "Add To Cart"
+                                : "Added To Cart"}
+                            </Button>
+                          </CardDescription>
+                        </CardContent>
                       </div>
-                      <p className="mb-2 text-gray-500">
-                        Lorem Ipsum is simply dummy text of the printing and
-                        typesetting industry. Lorem Ipsum has been the
-                        industry's standard dummy text ever since the 1500s.
-                      </p>
-                    </div>
-                  </div>
-                  <div className="border-t border-gray-200 md:w-1/4 lg:border-l lg:border-t-0">
-                    <div className="p-5">
-                      <span className="text-xl font-semibold text-black">
-                        $989
-                      </span>
-
-                      <p className="text-green-500">Free Shipping</p>
-                      <div className="my-3">
-                        <a className="inline-block cursor-pointer rounded-md border border-transparent bg-blue-600 px-4 py-2 text-white hover:bg-blue-700">
-                          {" "}
-                          Add to Cart{" "}
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </article>
-            </main>
+                    </Card>
+                  );
+                })
+              ) : (
+                <>There are no products</>
+              )}
+            </div>
           </div>
         </div>
       </section>

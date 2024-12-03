@@ -1,3 +1,4 @@
+import { z } from "zod";
 import { createTRPCRouter, protectedProcedure } from "~/server/api/trpc";
 import { AddressValidation } from "~/validations/address";
 
@@ -9,5 +10,10 @@ export const addressRouter = createTRPCRouter({
         data: { ...input, userId: ctx.session.user.id },
       });
       return res;
+    }),
+  getUserAddresses: protectedProcedure
+    .input(z.object({ userId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      return await ctx.db.address.findMany({ where: { userId: input.userId } });
     }),
 });

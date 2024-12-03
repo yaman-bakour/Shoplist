@@ -124,6 +124,15 @@ export const userRouter = createTRPCRouter({
     return await ctx.db.user.findMany();
   }),
 
+  getUserInfo: protectedProcedure
+    .input(z.object({ userId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      return await ctx.db.user.findUnique({
+        where: { id: input.userId },
+        include: { Addresses: true },
+      });
+    }),
+
   // updateUser: protectedProcedure
   //   .input(updateUserValidation)
   //   .mutation(async ({ ctx, input }) => {

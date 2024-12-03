@@ -42,8 +42,31 @@ import {
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+interface CartItem {
+  productId: string;
+  name: string;
+  quantity: number;
+  priceInCents: number;
+}
+
+export const CartContext = React.createContext<{
+  cart: CartItem[];
+  setCart: React.Dispatch<React.SetStateAction<CartItem[]>>;
+} | null>(null);
+
+export const GlobalContext = ({ children }: { children: React.ReactNode }) => {
+  const [cart, setCart] = React.useState<CartItem[]>([]);
+  return (
+    <CartContext.Provider value={{ cart, setCart }}>
+      {children}
+    </CartContext.Provider>
+  );
+};
+
+export const useGlobalContext = () => React.useContext(CartContext);
 
 export default function AppSidebar() {
+  const Context = useGlobalContext();
   const { data: session } = useSession();
   const data = {
     user: {
@@ -87,9 +110,9 @@ export default function AppSidebar() {
         url: "/address/new",
       },
       {
-        icon: Ship,
-        title: "Shipping",
-        url: "/shipping",
+        icon: ShoppingCart,
+        title: "Cart",
+        url: "/cart",
       },
       {
         icon: Logs,
@@ -97,7 +120,7 @@ export default function AppSidebar() {
         url: "/products",
       },
       {
-        icon: ShoppingCart,
+        icon: Ship,
         title: "My Orders",
         url: "/orders",
       },
@@ -159,6 +182,13 @@ export default function AppSidebar() {
                       >
                         <item.icon />
                         {item.title}
+                        {item.title === "Cart" ? (
+                          <div className="min-w-6 rounded-full bg-gray-300 text-center">
+                            {Context?.cart.length}
+                          </div>
+                        ) : (
+                          <></>
+                        )}
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>

@@ -1,26 +1,39 @@
+"use client";
 import React from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/Card";
 import Link from "next/link";
+import { UserInfoType } from "~/types";
 
-const UserAddresses = () => {
+interface Props {
+  userInfo: UserInfoType | undefined;
+}
+
+const UserAddresses = ({ userInfo }: Props) => {
   return (
-    <Link href={`/address/`}>
-      <div className="mb-5 gap-4">
-        <figure className="align-center flex w-full cursor-pointer rounded-md bg-gray-100 p-4">
-          <div className="mr-3">
-            <span className="mt-2 flex h-12 w-12 items-center justify-center rounded-full bg-white text-yellow-500 shadow">
-              <i className="fa fa-map-marker-alt"></i>
-            </span>
-          </div>
-          <figcaption className="text-gray-600">
-            <p>
-              123 street <br /> Orlando, FL, 34456, US
-              <br />
-              Phone no: 1234568746
-            </p>
-          </figcaption>
-        </figure>
+    <div className="flex flex-col">
+      <div className="w-full grid-cols-2 gap-10 p-10 md:grid">
+        {userInfo?.Addresses?.map((address) => (
+          <Card className="mb-10 h-fit min-w-80">
+            <CardContent>
+              <CardHeader>
+                <CardTitle>{address.address}</CardTitle>
+              </CardHeader>
+              <CardContent className="text-muted-foreground">
+                {`${address.country},${address.state},${address.state}`}
+                <br />
+                Phone number : {address.phonenumber}
+              </CardContent>
+            </CardContent>
+          </Card>
+        ))}
       </div>
-    </Link>
+      <Link
+        href={"address/new"}
+        className="ml-8 w-fit rounded-md bg-blue-400 px-4 py-2 text-white hover:bg-blue-500"
+      >
+        Add Address
+      </Link>
+    </div>
   );
 };
 

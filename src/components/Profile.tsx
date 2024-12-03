@@ -1,45 +1,52 @@
+"use client";
 import React from "react";
 import UserAddresses from "./UserAddresses";
-import Link from "next/link";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "./ui/Card";
+import { userInfo } from "os";
+import { api } from "~/trpc/react";
+import { useSession } from "next-auth/react";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/Avatar";
 
 const Profile = () => {
+  const { data: session } = useSession();
+  const { data: userInfo } = api.user.getUserInfo.useQuery({
+    userId: session?.user.id ?? "",
+  });
   return (
-    <>
-      <section className="py-10">
-        <div className="container mx-auto max-w-screen-xl px-4">
-          <main className="px-4 md:w-2/3 lg:w-3/4">
-            <figure className="flex items-start sm:items-center">
-              <div className="relative">
-                <img
-                  className="mr-4 h-16 w-16 rounded-full"
-                  src={"/logo192.png"}
-                  alt={"user name"}
-                />
-              </div>
-              <figcaption>
-                <h5 className="text-lg font-semibold">Ghulam</h5>
-                <p>
-                  <b>Email:</b> ghulam@gmail.com | <b>Joined On:</b>
-                  2023-12-24
-                </p>
-              </figcaption>
-            </figure>
-
-            <hr className="my-4" />
-
-            <UserAddresses />
-
-            <Link href="/address/new">
-              <button className="inline-block rounded-md border border-gray-300 px-4 py-2 text-blue-600 hover:bg-gray-100">
-                <i className="fa fa-plus mr-1"></i> Add new address
-              </button>
-            </Link>
-
-            <hr className="my-4" />
-          </main>
+    <div className="mx-10">
+      <Card className="h-fit">
+        <div className="flex">
+          <Avatar className="my-auto ml-8 h-16 w-16 rounded-full">
+            <AvatarImage
+              src={session?.user.image ?? ""}
+              alt={session?.user.name ?? ""}
+            />
+            <AvatarFallback className="rounded-lg">
+              {session?.user.name?.split(" ").map((n) => {
+                return n.charAt(0).toUpperCase();
+              })}
+            </AvatarFallback>
+          </Avatar>
+          <CardContent>
+            <CardHeader>
+              <CardTitle>Full Name : {userInfo?.name}</CardTitle>
+              <CardDescription>
+                Email : {userInfo?.email}
+                <br /> role : {userInfo?.UserRole}
+              </CardDescription>
+            </CardHeader>
+          </CardContent>
         </div>
-      </section>
-    </>
+      </Card>
+      <h1 className="mt-20 text-4xl">Addresses</h1>
+      <UserAddresses userInfo={userInfo} />
+    </div>
   );
 };
 

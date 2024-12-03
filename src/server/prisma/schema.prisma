@@ -73,8 +73,19 @@ model Product {
     stock                Int
     createdAt            DateTime               @default(now())
     updatedAt            DateTime               @updatedAt
-    Orders               Order[]
     DownloadVerification DownloadVerification[]
+    OrderProducts        OrderProducts[]
+}
+
+model OrderProducts {
+    productId     String
+    orderId       String
+    numberOfItems Int
+
+    Order   Order   @relation(fields: [orderId], references: [id])
+    Product Product @relation(fields: [productId], references: [id])
+
+    @@id([orderId, productId])
 }
 
 model Order {
@@ -84,9 +95,9 @@ model Order {
     createdAt        DateTime @default(now())
     updatedAt        DateTime @updatedAt
 
-    userId  String
-    User    User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-    Product Product[]
+    userId        String
+    User          User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+    OrderProducts OrderProducts[]
 }
 
 model DownloadVerification {

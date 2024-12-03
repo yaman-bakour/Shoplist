@@ -8,10 +8,32 @@ import {
 } from "~/server/api/trpc";
 import { NewProductValidation } from "~/validations/product";
 
+const ProductsFilter = z
+  .object({
+    min: z.number({ coerce: true }).nullish(),
+    max: z.number({ coerce: true }).nullish(),
+    Category: z.string().nullish(),
+  })
+  .optional();
+
 export const productRouter = createTRPCRouter({
-  getAllProducts: protectedProcedureAdmin.query(async ({ ctx }) => {
-    return await ctx.db.product.findMany({});
-  }),
+  getAllProducts: protectedProcedureAdmin
+    .input(ProductsFilter)
+    .query(async ({ input, ctx }) => {
+      if (!input) return await ctx.db.product.findMany({});
+      else
+        return await ctx.db.product.findMany({
+          where: {
+            priceInCents: {
+              gte: input.min ? input.min * 100 : 0,
+              ...(input.max ? { lte: input.max * 100 } : {}),
+            },
+            ...(input.Category
+              ? { category: { equals: input.Category as Category } }
+              : {}),
+          },
+        });
+    }),
   addProductMutation: protectedProcedureAdmin
     .input(NewProductValidation)
     .mutation(async ({ ctx, input }) => {

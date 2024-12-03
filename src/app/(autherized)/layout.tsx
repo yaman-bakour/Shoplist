@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
-import AppSidebar from "~/components/AppSidebar";
-import { SidebarProvider, SidebarTrigger } from "~/components/ui/Sidebar";
+import AppSidebar, { GlobalContext } from "~/components/AppSidebar";
+import { SidebarProvider } from "~/components/ui/Sidebar";
 import { auth } from "~/server/auth";
 
 export default async function RootLayout({
@@ -13,8 +13,10 @@ export default async function RootLayout({
   return (
     <SidebarProvider>
       <main className="flex w-full">
-        <AppSidebar />
-        {children}
+        <GlobalContext>
+          <AppSidebar />
+          {children}
+        </GlobalContext>
       </main>
     </SidebarProvider>
   );
