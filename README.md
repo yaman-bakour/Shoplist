@@ -1,3 +1,12 @@
+# Demo
+
+clone the project and run:
+pnpm install
+pnpm db:migrate-dev
+
+Sign in as Admin with this account : `email:manager@test.com,password:asddsa`.
+Sign in as User with this account : `email:manager@test.com,password:asddsa`.
+
 # Create T3 App
 
 This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
